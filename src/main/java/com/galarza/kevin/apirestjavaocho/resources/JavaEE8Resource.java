@@ -17,6 +17,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import pck_entidades.ClsParametrosMail;
+import pck_mail.ClsEnvioMailFull;
+import pck_seguridad.Seguridad;
 
 /**
  *
@@ -40,18 +43,55 @@ public class JavaEE8Resource {
     @Path("api_fecha")
     @Produces(MediaType.APPLICATION_JSON)
     public String getApiFecha() {
-        log.info("-------------INIT----------------");
-        ServicesApiFecha apiFecha = new ServicesApiFecha();
-        log.info("Api de fecha");
-        log.info("Fecha actual: " + apiFecha.getFechaActual());
-        log.info("Fecha Hora actual: " + apiFecha.getFechaHoraActual());
-        log.info("Día de la semana de hoy: " + apiFecha.getDiaSemanaActual());
-        log.info("-------------FIN------------------");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("fechaActual", apiFecha.getFechaActual());
-        jsonObject.addProperty("fechaHoraActual", apiFecha.getFechaHoraActual());
-        jsonObject.addProperty("diaSemanaActual", apiFecha.getDiaSemanaActual());
+        JsonObject jsonObject = null;
+        try {
 
+            String clave = "KEVIN";
+            String calveEn = Seguridad.encrypt("Litoral2023.", clave);
+            String calveDes = Seguridad.decrypt("YvmPircxIDq1GGJLgrFO7bFSsMNeG9wq", clave);
+
+            log.info("calveEn " + calveEn);
+            log.info("calveDes " + calveDes);
+            log.info("=======================================================");
+            ClsEnvioMailFull mail = new ClsEnvioMailFull();
+            ClsParametrosMail parametros = new ClsParametrosMail();
+            parametros.setID("2");
+            parametros.setDESCRIPCION("Notificaciones Internas");
+            parametros.setSERVIDOR("smtp.office365.com");
+            parametros.setPUERTO("587");
+            parametros.setUSUARIO("notificacionesinternas@bancodellitoral.com");
+            parametros.setTOKEN("Will1990@");
+//            parametros.setTOKEN(clave);
+            parametros.setPASS("f/NzfR0eiLupf6LBMG5m01cE+nQqUP1TR8cPXE8hJ58PKOz3Xhk1XHeb2k9IlvsOVaFiB/UMtM8=");
+//            parametros.setPASS("YvmPircxIDq1GGJLgrFO7bFSsMNeG9wq");
+            parametros.setESTADO("A");
+            parametros.setTLS("true");
+            parametros.setSSL("true");
+            parametros.setAUTH("true");
+            parametros.setPROTOCOLO("smtp");
+            parametros.setETIQUETA("Banco del Litoral");
+            parametros.setPROTOCOLO_SSL("TLSv1.2");
+
+            log.info(parametros.toString());
+            log.info(parametros.getPASS());
+            boolean sendMail = mail.CorreoNormal("kgalarza@bancodellitoral.com",
+                    "", "prueba maven", "hola desde maven", "N",
+                    "", "", parametros);
+
+            log.info("-------------INIT----------------");
+            ServicesApiFecha apiFecha = new ServicesApiFecha();
+            log.info("Api de fecha");
+            log.info("Fecha actual: " + apiFecha.getFechaActual());
+            log.info("Fecha Hora actual: " + apiFecha.getFechaHoraActual());
+            log.info("Día de la semana de hoy: " + apiFecha.getDiaSemanaActual());
+            log.info("-------------FIN------------------");
+            jsonObject = new JsonObject();
+            jsonObject.addProperty("fechaActual", apiFecha.getFechaActual());
+            jsonObject.addProperty("fechaHoraActual", apiFecha.getFechaHoraActual());
+            jsonObject.addProperty("diaSemanaActual", apiFecha.getDiaSemanaActual());
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+        }
         return gson.toJson(jsonObject);
     }
 

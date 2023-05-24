@@ -18,6 +18,11 @@
     
     <dependencies>
         <dependency>
+            <groupId>mail</groupId>
+            <artifactId>SendMail</artifactId>
+            <version>2</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>${jakartaee}</version>
@@ -30,9 +35,22 @@
             <artifactId>gson</artifactId>
             <version>2.9.1</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.github.kgalarza95</groupId>
+            <artifactId>Log</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
     
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+        
     <build>
         <plugins>
             <plugin>
